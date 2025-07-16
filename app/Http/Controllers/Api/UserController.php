@@ -16,6 +16,20 @@ class UserController extends Controller
         return response()->json(User::all());
     }
 
+    public function show($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'User tidak ditemukan.'
+            ], 404);
+        }
+
+        return response()->json($user);
+    }
+
+
     // Menyimpan user baru ke database
     public function store(Request $request)
     {
@@ -60,6 +74,9 @@ class UserController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:10048',
+            'pdf'   => 'nullable|mimes:pdf|max:5120',
+            'excel' => 'nullable|mimes:xls,xlsx|max:5120',
         ]);
 
         $user->name = $validated['name'];
