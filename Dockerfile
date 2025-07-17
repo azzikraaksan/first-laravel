@@ -7,7 +7,11 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libonig-dev \
     libxml2-dev \
-    zip unzip curl git libpq-dev \
+    zip \
+    unzip \
+    curl \
+    git \
+    libpq-dev \
     && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd
 
 # Install Composer
@@ -19,19 +23,14 @@ WORKDIR /var/www
 # Copy project files
 COPY . .
 
-# Install Laravel dependencies
+# Install dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Ubah permission
+# Copy permissions
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage
 
-# Copy start.sh dan bikin executable
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-
-# Expose port
+# Jalankan start.sh
+RUN chmod +x start.sh
 EXPOSE 8080
-
-# Jalankan script start
-CMD ["/start.sh"]
+CMD ["sh", "./start.sh"]
