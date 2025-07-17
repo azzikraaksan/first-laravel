@@ -115,7 +115,7 @@
             </svg>
         </div> -->
 
-        <h1 class="title">Heyyhoooo👋</h1>
+        <h1 class="title">Haloowww👋</h1>
         <p class="desc">Welcome! Here’s your classic dashboard to explore user data✨</p>
 
         <a href="{{ route('users.index') }}" class="btn">
