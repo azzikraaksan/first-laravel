@@ -23,20 +23,20 @@ WORKDIR /var/www
 # Copy project files
 COPY . .
 
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader
-
-# Copy permissions
+# Copy permission untuk storage dan bootstrap
 RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage
+    && chmod -R 775 storage bootstrap/cache
 
-# Laravel commands
-RUN php artisan config:cache
-RUN php artisan route:cache
-RUN php artisan view:cache
+# Install dependencies (opsional bisa kasih env jika prod)
+RUN composer install --optimize-autoloader --no-interaction --no-dev
 
-# Expose port
+# Laravel caches (bisa skip kalau masih dev)
+RUN php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache
+
+# Expose port (boleh 8000, 8080, bebas asal match sama `CMD`)
 EXPOSE 8080
 
-# Start server
+# Run Laravel (bukan ideal, tapi bisa untuk dev)
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
