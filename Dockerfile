@@ -32,5 +32,5 @@ RUN chown -R www-data:www-data /var/www \
 
 # Jalankan start.sh
 RUN chmod +x start.sh
-EXPOSE 8080
+EXPOSE 8000
 CMD ["sh", "./start.sh"]
