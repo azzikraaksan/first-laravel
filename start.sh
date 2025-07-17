@@ -4,7 +4,9 @@
 [ ! -f .env ] && cp .env.example .env
 
 # Generate app key kalau belum ada
-php artisan key:generate --force
+php artisan key:generate
+php artisan storage:link
+php artisan migrate --force
 
 # Cache config, route, dan view
 php artisan config:cache
