@@ -1,0 +1,9 @@
+storage/*
+!storage/.gitignore
+
+public/storage/*
+!public/storage/.gitignore
+
+node_modules
+vendor
+.env
