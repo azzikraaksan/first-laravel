@@ -7,11 +7,7 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libonig-dev \
     libxml2-dev \
-    zip \
-    unzip \
-    curl \
-    git \
-    libpq-dev \
+    zip unzip curl git libpq-dev \
     && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd
 
 # Install Composer
@@ -23,20 +19,19 @@ WORKDIR /var/www
 # Copy project files
 COPY . .
 
-# Copy permission untuk storage dan bootstrap
+# Install Laravel dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Ubah permission
 RUN chown -R www-data:www-data /var/www \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 755 /var/www/storage
 
-# Install dependencies (opsional bisa kasih env jika prod)
-RUN composer install --optimize-autoloader --no-interaction --no-dev
+# Copy start.sh dan bikin executable
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
-# Laravel caches (bisa skip kalau masih dev)
-RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
-
-# Expose port (boleh 8000, 8080, bebas asal match sama `CMD`)
+# Expose port
 EXPOSE 8080
 
-# Run Laravel (bukan ideal, tapi bisa untuk dev)
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+# Jalankan script start
+CMD ["/start.sh"]

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Salin .env kalau belum ada
+[ ! -f .env ] && cp .env.example .env
+
+# Generate app key kalau belum ada
+php artisan key:generate --force
+
+# Cache config, route, dan view
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Start Laravel dengan PHP built-in server
+php artisan serve --host=0.0.0.0 --port=8080
